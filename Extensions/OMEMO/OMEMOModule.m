@@ -299,7 +299,7 @@ static const int xmppLogLevel = XMPP_LOG_LEVEL_WARN;
         if (message == originalMessage) {
             [multicastDelegate omemo:self receivedKeyData:keyData iv:iv senderDeviceId:deviceId fromJID:bareJID payload:payload message:originalMessage];
         } else {
-            [multicastDelegate omemo:self receivedForwardedKeyData:keyData iv:iv senderDeviceId:deviceId forJID:bareJID  payload:payload isIncoming:isIncoming delayed:delayed forwardedMessage:message originalMessage:originalMessage];
+            [multicastDelegate omemo:self receivedForwardedKeyData:keyData iv:iv senderDeviceId:deviceId forJID:bareJID  payload:payload isIncoming:isIncoming delayed:delayed forwardedMessage:message originalMessage:originalMessage isForward:YES];
         }
     }
 }
@@ -408,7 +408,7 @@ static const int xmppLogLevel = XMPP_LOG_LEVEL_WARN;
             [messageCustomForward addChild:messageType];
             [messageCustomForward addChild:customForward];
             NSLog(@"messageCustomForward-->%@",messageCustomForward);
-            [self receiveMessage:messageCustomForward forJID:message.from isIncoming:YES delayed:delayed originalMessage:message];
+            [self receiveMessage:messageCustomForward forJID:forJID isIncoming:YES delayed:delayed originalMessage:message];
         } else {
             [self receiveMessage:mam forJID:forJID isIncoming:isIncoming delayed:delayed originalMessage:message];
         }
