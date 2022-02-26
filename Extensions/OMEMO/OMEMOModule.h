@@ -238,7 +238,7 @@ senderDeviceId:(uint32_t)senderDeviceId
    isIncoming:(BOOL)isIncoming
       delayed:(nullable NSDate*)delayed
 forwardedMessage:(XMPPMessage*)forwardedMessage
-originalMessage:(XMPPMessage*)originalMessage;
+originalMessage:(XMPPMessage*)originalMessage isForward:(BOOL)isForward;
 
 @end
 
