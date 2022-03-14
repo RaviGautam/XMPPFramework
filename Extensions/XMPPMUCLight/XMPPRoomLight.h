@@ -31,6 +31,7 @@
 - (nonnull instancetype)initWithJID:(nonnull XMPPJID *)roomJID roomname:(nonnull NSString *) roomname;
 - (nonnull instancetype)initWithRoomLightStorage:(nullable id <XMPPRoomLightStorage>)storage jid:(nonnull XMPPJID *)aRoomJID roomname:(nonnull NSString *)aRoomname dispatchQueue:(nullable dispatch_queue_t)queue;
 - (void)createRoomLightWithMembersJID:(nullable NSArray<XMPPJID *> *) members;
+- (void)createRoomLightWithMembersJID:(nullable NSArray<XMPPJID *> *) members withImage:(nullable NSString*)imgUrl;
 - (void)leaveRoomLight;
 - (void)addUsers:(nonnull NSArray<XMPPJID *> *)users;
 - (void)fetchMembersList;
