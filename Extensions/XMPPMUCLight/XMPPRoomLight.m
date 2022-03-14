@@ -214,6 +214,55 @@ static NSString *const XMPPRoomLightDestroy = @"urn:xmpp:muclight:0#destroy";
         dispatch_async(moduleQueue, block);
 }
 
+- (void)createRoomLightWithMembersJID:(nullable NSArray<XMPPJID *> *) members withImage:(nullable NSString*)imgUrl{
+    dispatch_block_t block = ^{ @autoreleasepool {
+        //        _roomJID = [XMPPJID jidWithUser:[XMPPStream generateUUID]
+        //                                     domain:self.domain
+        //                                   resource:nil];
+
+        NSString *iqID = [XMPPStream generateUUID];
+        NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
+        [iq addAttributeWithName:@"id" stringValue:iqID];
+        [iq addAttributeWithName:@"to" stringValue:self.roomJID.full];
+        [iq addAttributeWithName:@"type" stringValue:@"set"];
+
+        NSXMLElement *query = [NSXMLElement elementWithName:@"query" xmlns:@"urn:xmpp:muclight:0#create"];
+        NSXMLElement *configuration = [NSXMLElement elementWithName:@"configuration"];
+        [configuration addChild:[NSXMLElement elementWithName:@"roomname" stringValue:roomname]];
+        [configuration addChild:[NSXMLElement elementWithName:@"image_url" stringValue:imgUrl]];
+        NSInteger time = [[NSDate date] timeIntervalSince1970]* 1000;
+        NSLog(@"Time: %@",[NSString stringWithFormat:@"%ld",time]);
+        [configuration addChild:[NSXMLElement elementWithName:@"created_at" stringValue:[NSString stringWithFormat:@"%ld",time]]];
+
+        NSXMLElement *occupants = [NSXMLElement elementWithName:@"occupants"];
+
+        for (XMPPJID *jid in members){
+            NSXMLElement *userElement = [NSXMLElement elementWithName:@"user" stringValue:jid.bare];
+            [userElement addAttributeWithName:@"affiliation" stringValue:@"member"];
+            [occupants addChild:userElement];
+        }
+
+        [query addChild:configuration];
+        [query addChild:occupants];
+
+        [iq addChild:query];
+
+        [responseTracker addID:iqID
+                        target:self
+                      selector:@selector(handleCreateRoomLight:withInfo:)
+                       timeout:60.0];
+
+        [xmppStream sendElement:iq];
+    }};
+
+    if (dispatch_get_specific(moduleQueueTag))
+        block();
+    else
+        dispatch_async(moduleQueue, block);
+
+
+}
+
 - (void)setMemberListVersion:(NSString *)aVersion{
 	dispatch_block_t block = ^{ @autoreleasepool {
 		self->memberListVersion = aVersion;
