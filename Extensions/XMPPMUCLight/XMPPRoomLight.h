@@ -43,6 +43,7 @@
 - (void)getConfiguration;
 - (void)setConfiguration:(nonnull NSArray<NSXMLElement *> *)configs;
 - (void)flushVersion;
+- (void)removeMemberFromGroup:(nonnull NSString *)member;
 @end
 
 @protocol XMPPRoomLightStorage <NSObject>
